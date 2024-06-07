@@ -1,18 +1,17 @@
 import numpy as np
 
-
+from utils import validation_split, regularized_regression_cost as compute_cost
+from utils import log_current
 
 
 class LinearRegression:
     """Linear regression model with L2 regularization."""
-
 
     DEFAULT_EPOCHS = 100
     DEFAULT_ALPHA = 0.01
     DEFAULT_LAMBDA = 0.0001
     DEFAULT_ERROR_THRESHOLD = 0.001
     DEFAULT_VALIDATION_SIZE = 0.2
-
 
     def __init__(self):
         self.EXIT = False
@@ -22,6 +21,8 @@ class LinearRegression:
         if past_cost - current_cost <= error_threshold:
             self.c += 1
             if self.c >= 10:
+                log_current(k=k, num_out=0, output_limit=0, cost=0, vcost=current_cost, alter=True)
+                print(f"\nEpoch {k} > vCost Converged with threshold {error_threshold}. Or performance degraded.")
                 self.EXIT = True  # Also returns in case of validation perf degradation (overfit)
 
         else:
@@ -77,8 +78,6 @@ class LinearRegression:
         b : numpy.longdouble
             The optimized intercept.
         """
-        from .utils import validation_split, regularized_regression_cost
-        from .utils import log_current
 
         if output_limit <= 0:
             raise ValueError("Output limit should be greater than 0")
@@ -95,8 +94,8 @@ class LinearRegression:
         y_ = np.dot(X, W) + b
         y_val_ = np.dot(X_val, W) + b
 
-        cost = regularized_regression_cost(y, y_, Lambda, W, m)
-        past_cost = regularized_regression_cost(y_val, y_val_, Lambda, W, m)
+        cost = compute_cost(y, y_, Lambda, W, m)
+        past_cost = compute_cost(y_val, y_val_, Lambda, W, m)
         current_cost = 0
         k=0
 
@@ -116,8 +115,8 @@ class LinearRegression:
                     y_ = np.dot(X, W) + b
                     y_val_ = np.dot(X_val, W) + b
 
-                    cost = regularized_regression_cost(y, y_, Lambda, W, m)
-                    vcost = regularized_regression_cost(y_val, y_val_, Lambda, W, m)
+                    cost = compute_cost(y, y_, Lambda, W, m)
+                    vcost = compute_cost(y_val, y_val_, Lambda, W, m)
 
                     log_current(k, num_out, output_limit, cost, vcost)
 
@@ -125,13 +124,11 @@ class LinearRegression:
 
                 # CONVERGENCE
                 y_val_ = np.dot(X_val, W) + b
-                current_cost = regularized_regression_cost(y_val, y_val_, Lambda, W, m)  # vCost
+                current_cost = compute_cost(y_val, y_val_, Lambda, W, m)  # vCost
 
                 self.convergence_test(current_cost, past_cost, error_threshold, k)
 
                 if self.EXIT:
-                    log_current(k=k, num_out=0, output_limit=0, cost=0, vcost=current_cost, alter=True)
-                    print(f"\nEpoch {k} > vCost Converged with threshold {error_threshold}. Or performance degraded.")
                     return W, b
 
                 past_cost = current_cost

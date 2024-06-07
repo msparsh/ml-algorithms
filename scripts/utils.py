@@ -1,7 +1,6 @@
 import numpy as np
 
-
-# Linear
+# LR
 
 
 def validation_split(X, y, validation_size=0):
@@ -25,18 +24,4 @@ def log_current(k, num_out, output_limit, cost, vcost, alter=False):
     print(f"({k // num_out}/{output_limit}) > Epoch: {k}",
           f"cost: {cost:.8f}",
           f"vCost: {vcost:.8f}")
-
-
 # LR
-
-# Logistic
-
-def logistic_cost(y, y_, e=1e-35):
-    """Returns logistic cost between predicted values and true labels."""
-
-    m = y.shape[0]
-    c = 0
-
-    for i in range(m):
-        c += y[i] * np.log(y_[i] + e) + (1 - y[i]) * np.log(1 - y_[i] + e)
-    return c / (-m)

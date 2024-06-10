@@ -1,18 +1,18 @@
 import numpy as np
 
-
+from .utils import (validation_split,
+                    regularized_regression_cost,
+                    log_current)
 
 
 class LinearRegression:
     """Linear regression model with L2 regularization."""
-
 
     DEFAULT_EPOCHS = 100
     DEFAULT_ALPHA = 0.01
     DEFAULT_LAMBDA = 0.0001
     DEFAULT_ERROR_THRESHOLD = 0.001
     DEFAULT_VALIDATION_SIZE = 0.2
-
 
     def __init__(self):
         self.EXIT = False
@@ -77,8 +77,6 @@ class LinearRegression:
         b : numpy.longdouble
             The optimized intercept.
         """
-        from .utils import validation_split, regularized_regression_cost
-        from .utils import log_current
 
         if output_limit <= 0:
             raise ValueError("Output limit should be greater than 0")
@@ -98,7 +96,7 @@ class LinearRegression:
         cost = regularized_regression_cost(y, y_, Lambda, W, m)
         past_cost = regularized_regression_cost(y_val, y_val_, Lambda, W, m)
         current_cost = 0
-        k=0
+        k = 0
 
         self.c = 0  # to count convergence for consecutive iterations
 

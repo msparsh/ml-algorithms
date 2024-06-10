@@ -31,12 +31,30 @@ def log_current(k, num_out, output_limit, cost, vcost, alter=False):
 
 # Logistic
 
-def logistic_cost(y, y_, e=1e-35):
+def logistic_cost(true_value, predictions, e=1e-35):
     """Returns logistic cost between predicted values and true labels."""
+    #
+    # m = true_value.shape[0]
+    # c = 0
+    # for i in range(m):
+    #     c += true_value[i] * np.log(predictions[i] + e) + (1 - true_value[i]) * np.log(1 - predictions[i] + e)
+    # return c / (-m)
 
-    m = y.shape[0]
-    c = 0
+    true_value = np.array(true_value)
+    predictions = np.array(predictions)
 
-    for i in range(m):
-        c += y[i] * np.log(y_[i] + e) + (1 - y[i]) * np.log(1 - y_[i] + e)
-    return c / (-m)
+    # Compute the log-loss using vectorized operations
+    c = true_value * np.log(predictions + e) + (1 - true_value) * np.log(1 - predictions + e)
+    c =-np.mean(c)
+
+    return c
+
+
+# Stuff to use in future
+
+def simultaneous_shuffle(X, y):
+    pass
+
+
+def random_sample(X, y, sample_size):
+    pass

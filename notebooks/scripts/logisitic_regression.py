@@ -2,6 +2,7 @@ import numpy as np
 
 from sklearn.metrics import f1_score
 from matplotlib import pyplot as plt
+from .utils import validation_split, logistic_cost
 
 
 def create_plot(costs):
@@ -66,7 +67,6 @@ class LogisticRegression:
         tuple
             Trained model parameters W and b.
         """
-        from .utils import validation_split, logistic_cost
 
         X, y, X_val, y_val = validation_split(X, y, validation_size)
 

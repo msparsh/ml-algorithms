@@ -1,8 +1,6 @@
 import numpy as np
 
-from .utils import (validation_split,
-                    regularized_regression_cost,
-                    log_current)
+from .utils import validation_split, regularized_regression_cost, log_current
 
 
 class LinearRegression:
@@ -22,7 +20,7 @@ class LinearRegression:
         if past_cost - current_cost <= error_threshold:
             self.c += 1
             if self.c >= 10:
-                self.EXIT = True  # Also returns in case of validation perf degradation (overfit)
+                self.EXIT = True  # Or validation perf degradation (overfit)
 
         else:
             self.c = 0  # For counting consecutive iterations of convergence
@@ -41,15 +39,19 @@ class LinearRegression:
 
         return W, b
 
-    def fit(self, X, y,
-            epochs=DEFAULT_EPOCHS,
-            alpha=DEFAULT_ALPHA,
-            Lambda=DEFAULT_LAMBDA,
-            error_threshold=DEFAULT_ERROR_THRESHOLD,
-            validation_size=DEFAULT_VALIDATION_SIZE,
-            output_limit=10):
+    def fit(
+        self,
+        X,
+        y,
+        epochs=DEFAULT_EPOCHS,
+        alpha=DEFAULT_ALPHA,
+        Lambda=DEFAULT_LAMBDA,
+        error_threshold=DEFAULT_ERROR_THRESHOLD,
+        validation_size=DEFAULT_VALIDATION_SIZE,
+        output_limit=10,
+    ):
         """Fit the linear regression model to the given data.
-        
+
         Parameter
         ---------
         epochs: int, default=1000
@@ -60,10 +62,10 @@ class LinearRegression:
 
         Lambda : float, default=0.0001
             Rate for l2 Regularization
-        
+
         error_threshold: float, default=0.001
             Threshold for vCost convergence
-        
+
         validation_size: float, default=0.2
             Percent of data for validation, 0 <= vs < 1
 
@@ -115,7 +117,8 @@ class LinearRegression:
                     y_val_ = np.dot(X_val, W) + b
 
                     cost = regularized_regression_cost(y, y_, Lambda, W, m)
-                    vcost = regularized_regression_cost(y_val, y_val_, Lambda, W, m)
+                    vcost = regularized_regression_cost(y_val, y_val_, Lambda,
+                                                        W, m)
 
                     log_current(k, num_out, output_limit, cost, vcost)
 
@@ -123,13 +126,27 @@ class LinearRegression:
 
                 # CONVERGENCE
                 y_val_ = np.dot(X_val, W) + b
-                current_cost = regularized_regression_cost(y_val, y_val_, Lambda, W, m)  # vCost
+                current_cost = regularized_regression_cost(
+                    y_val, y_val_, Lambda, W, m
+                )  # vCost
 
-                self.convergence_test(current_cost, past_cost, error_threshold, k)
+                self.convergence_test(current_cost, past_cost,
+                                      error_threshold, k)
 
                 if self.EXIT:
-                    log_current(k=k, num_out=0, output_limit=0, cost=0, vcost=current_cost, alter=True)
-                    print(f"\nEpoch {k} > vCost Converged with threshold {error_threshold}. Or performance degraded.")
+                    log_current(
+                        k=k,
+                        num_out=0,
+                        output_limit=0,
+                        cost=0,
+                        vcost=current_cost,
+                        alter=True,
+                    )
+                    print(
+                        f"\nEpoch {k} > vCost Converged with threshold",
+                        f"{error_threshold}.",
+                    )
+                    print("Or performance degraded.")
                     return W, b
 
                 past_cost = current_cost
@@ -137,7 +154,10 @@ class LinearRegression:
 
         # CTRL C
         except KeyboardInterrupt:
-            log_current(k=k, num_out=0, output_limit=0, cost=0, vcost=current_cost, alter=True)
+            log_current(
+                k=k, num_out=0, output_limit=0, cost=0,
+                vcost=current_cost, alter=True
+            )
             print(f"\nTerminated! Returned: Weights: {W}, Bias: {b}")
             return W, b
         # CTRL C

@@ -23,7 +23,8 @@ def sigmoid_dot(X, W, b):
 class LogisticRegression:
     """Logistic Regression implementation.
 
-    This class provides functionalities to perform logistic regression. Check the fit method.
+    This class provides functionalities to perform logistic regression.
+    Check the fit method.
     Expects a shuffled dataset.
     """
 
@@ -98,8 +99,8 @@ class LogisticRegression:
         return W, b, costs
 
     def predict(self, X, W, b):
-        """Generates predictions for input data X using trained model parameters W and b.
-        
+        """Generates predictions for input data X using trained
+        model parameters W and b.
         Returns rounded predictions. Might need to fix.
         """
 

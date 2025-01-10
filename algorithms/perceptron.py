@@ -16,7 +16,8 @@ class Perceptron:
             print("\nEpoch: ", epoch)
             for p, v in zip(points, values):
                 predictions = np.dot(para, p)
-                print("Applying on", p, para, "=", predictions, "with value", v, end="")
+                print("Applying on", p, para, "=",
+                      predictions, "with value", v, end="")
                 if v * predictions <= 0:
                     para = para + v * p
                 print("; Updated parameters:", para)

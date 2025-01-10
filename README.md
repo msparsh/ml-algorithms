@@ -31,13 +31,12 @@ pip install -r requirements.txt
 ```
 ## Usage
 
-Explore the notebooks. To run the scripts, navigate to the `scripts/` directory and execute the desired script. Take a look in `notebooks/variations/` to find some variations of the code. 
+Explore the notebooks. Take a look in `variations` to find some variations of the code. 
 
 ## Contributing
 
 We welcome contributions! If you have suggestions for improvements, feel free to create an issue or submit a pull request.
 
-### Example Contribution
 
 1. Fork the repository
 2. Create a new branch
